@@ -100,6 +100,11 @@ Inputs are z-score normalised with TerraMind's S2L2A pre-training statistics. Tr
 > ### 🙏 Acknowledgement
 > We sincerely thank the **Geo-Informatics and Space Technology Development Agency (GISTDA), Thailand** ([gistda.or.th](https://www.gistda.or.th/)) for supporting the dataset used in this work. Their Earth-observation expertise and data made the training and evaluation of KAO-TerraMind possible.
 
+> ### 🔒 Dataset license & availability
+> The GISTDA dataset is a **private dataset**. It is the property of **GISTDA, Thailand**, and is **not included in this repository and not publicly released**. Its images, labels and derived chips may **not be redistributed, republished or used outside this research** without prior written permission from GISTDA. The dataset is **not** covered by the code license below. To request access, please contact GISTDA directly ([gistda.or.th](https://www.gistda.or.th/)).
+>
+> What *is* shared: the code, the trained KAO-TerraMind checkpoints, and a few example chips and predictions shown as figures for illustration of the results.
+
 ---
 
 ## Installation
@@ -119,7 +124,7 @@ A single NVIDIA GPU is sufficient (all experiments were run on a Tesla T4, 16 GB
 
 ### 1. Prepare the data
 
-Chips must be 12-band 224 × 224 GeoTIFFs with matching masks, split spatially into train / val / test. Point `--data-root` (or `DATA_ROOT`) to the folder that contains them.
+The GISTDA dataset is private and not distributed with this repository (see [Dataset license & availability](#dataset)). To reproduce training you need your own data, or authorised access from GISTDA, as 12-band 224 × 224 GeoTIFF chips with matching masks, split spatially into train / val / test. Point `--data-root` (or `DATA_ROOT`) to the folder that contains them. Inference with the released checkpoints does not require the dataset.
 
 ### 2. Train and evaluate (one command)
 
@@ -225,4 +230,6 @@ KAO-TerraMind (A, B, C) is the original work of **Teerapong Panboonyuen**, © 20
 
 ## License
 
-*TODO: add a LICENSE file and state it here before making the repository public (note that TerraMind weights and the GISTDA dataset have their own terms).*
+**Dataset.** The GISTDA dataset is private and proprietary to GISTDA, Thailand. It is excluded from this repository and from any code license. See [Dataset license & availability](#dataset).
+
+**Code and trained weights.** *TODO: add a `LICENSE` file and state the chosen license here before making the repository public.* Note that the pre-trained TerraMind weights, TerraTorch and Sentinel-2 data each have their own terms, which continue to apply.
