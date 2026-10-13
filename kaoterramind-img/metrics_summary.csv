@@ -1,0 +1,8 @@
+Model,Params (M),"GFLOPs (224x224, bs1)",Overall Accuracy (%),Mean Class Accuracy (%),mIoU (%),Precision macro (%),Recall macro (%),F1 macro (%),F1 weighted (%),Cohen kappa,mAP (%),"Latency mean (ms, bs1)",Latency std (ms),Latency p95 (ms),"Throughput (img/s, bs16)","Peak GPU mem (GB, bs16)",Train time (min),Best epoch,Best val mIoU (%),Test chips,GPU,Precision mode
+TerraMind-1.0-tiny,13.31,22.84,75.0,54.03,37.18,46.56,54.03,48.61,76.37,0.6534,49.31,15.09,4.59,25.32,538.8,0.86,25.2,14,40.16,13974,Tesla T4,fp16 autocast
+TerraMind-1.0-small,31.08,30.11,77.75,54.62,39.05,48.12,54.62,50.58,78.5,0.6861,50.85,14.13,0.06,14.24,415.5,0.99,35.8,20,42.22,13974,Tesla T4,fp16 autocast
+TerraMind-1.0-base,99.37,57.66,78.44,56.75,40.82,49.84,56.75,52.57,79.28,0.6982,52.63,15.15,0.05,15.25,245.8,1.46,56.5,21,43.5,13974,Tesla T4,fp16 autocast
+TerraMind-1.0-large,320.22,146.71,76.34,58.58,40.13,49.05,58.58,52.04,77.68,0.6753,52.7,24.95,0.16,25.22,92.2,2.84,81.7,9,43.68,13974,Tesla T4,fp16 autocast
+KAO-TerraMind-A,99.37,57.66,78.61,55.78,40.81,50.59,55.78,52.48,79.37,0.6996,52.69,15.16,0.08,15.33,245.6,1.47,59.1,23,43.46,13974,Tesla T4,fp16 autocast
+KAO-TerraMind-B,99.37,57.66,78.31,56.27,40.97,50.61,56.27,52.74,79.22,0.6965,52.76,19.65,9.37,43.32,246.0,1.47,58.9,30,43.73,13974,Tesla T4,fp16 autocast
+KAO-TerraMind-C,121.74,118.06,78.9,56.44,41.13,50.6,56.44,52.8,79.66,0.7036,53.03,19.39,0.22,19.69,132.5,2.04,86.9,22,43.91,13974,Tesla T4,fp16 autocast
