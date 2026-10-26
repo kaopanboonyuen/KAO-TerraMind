@@ -105,7 +105,7 @@ footer{background:var(--deep);color:#b9cdd6;padding:50px 0;text-align:center}foo
 <p class="lead">Targeted adaptation of geospatial foundation models for dense prediction — a family of three pretrained variants built on TerraMind, tuned for land-cover segmentation from Earth observation imagery.</p>
 <p class="by">By <strong>Teerapong Panboonyuen (Kao)</strong> · Dataset supported by <strong>GISTDA, Thailand</strong></p>
 <div class="acts"><a class="btn b1" href="https://huggingface.co/kaopanboonyuen/KAO-TerraMind-C" target="_blank" rel="noopener">🤗 Download pretrained weights</a><a class="btn b2" href="#results">See the results</a><a class="btn b2" href="https://github.com/kaopanboonyuen/KAO-TerraMind" target="_blank" rel="noopener">GitHub code</a></div>
-</div><canvas id="globe" width="1040" height="1040" role="img" aria-label="Rotating globe with a satellite orbiting above Thailand"></canvas></div>
+</div><canvas id="globe" width="1040" height="1040" role="img" aria-label="Satellite-imagery Earth rotating over Thailand with a satellite orbiting behind and in front of it"></canvas></div>
 <div class="proof">
 <div><b data-n="41.13" data-d="2">0</b><span>test mIoU (%) — KAO-TerraMind-C, best of 7 models</span></div>
 <div><b>38%</b><span>of TerraMind-large's parameters (121.7M vs 320.2M) — and higher mIoU</span></div>
@@ -224,20 +224,46 @@ document.querySelectorAll('[data-n]').forEach(e=>{const n=+e.dataset.n,d=+e.data
 document.querySelectorAll('.cp').forEach(b=>b.onclick=()=>{navigator.clipboard.writeText(document.getElementById(b.dataset.t).innerText);b.textContent='Copied ✓';setTimeout(()=>b.textContent='Copy',1500)});
 const lb=document.getElementById('lb');document.querySelectorAll('figure img').forEach(i=>i.onclick=()=>{lb.firstChild.src=i.src;lb.classList.add('on')});lb.onclick=()=>lb.classList.remove('on');
 const io=new IntersectionObserver(a=>a.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll('.rv').forEach(e=>io.observe(e));
-// globe
-(()=>{const c=document.getElementById('globe'),x=c.getContext('2d'),W=1040,R=330,pts=[];
-for(let i=0;i<900;i++){const y=1-2*(i+.5)/900,r=Math.sqrt(1-y*y),a=i*2.39996;pts.push([r*Math.cos(a),y,r*Math.sin(a)])}
-const TH=[14*Math.PI/180,101*Math.PI/180];let t=0;const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+// globe: satellite-imagery Earth; the orbit passes behind the planet and re-emerges
+(()=>{const c=document.getElementById('globe'),x=c.getContext('2d'),W=1040,R=330,RO=innerWidth<700?170:220,ORX=R*1.38,ORY=R*.55,RING=-.5,TILT=.35,GOLD='#e8ae2f';
+const rm=matchMedia('(prefers-reduced-motion:reduce)').matches,TH=[14*Math.PI/180,101*Math.PI/180],TXW=1024,TXH=512;
+let T=null,vis=true,last=0;
+const oc=document.createElement('canvas');oc.width=oc.height=RO*2;const ox=oc.getContext('2d'),oi=ox.createImageData(RO*2,RO*2),ob=new Uint32Array(oi.data.buffer);
+const idx=[],PX=[],PY=[],PZ=[];
+for(let j=0;j<RO*2;j++)for(let i=0;i<RO*2;i++){const nx=(i+.5-RO)/RO,ny=-(j+.5-RO)/RO,d=nx*nx+ny*ny;if(d<1){idx.push(j*RO*2+i);PX.push(nx);PY.push(ny);PZ.push(Math.sqrt(1-d))}}
+const pts=[];for(let i=0;i<900;i++){const y=1-2*(i+.5)/900,r=Math.sqrt(1-y*y),a=i*2.39996;pts.push([r*Math.cos(a),y,r*Math.sin(a)])}
 function P(lat,lon,rot,tilt){const X=Math.cos(lat)*Math.sin(lon+rot),Y=Math.sin(lat),Z=Math.cos(lat)*Math.cos(lon+rot);return[X,Y*Math.cos(tilt)-Z*Math.sin(tilt),Y*Math.sin(tilt)+Z*Math.cos(tilt)]}
-function f(){x.clearRect(0,0,W,W);x.translate(W/2,W/2);const tilt=.35,rot=rm?-1.76:-1.76+Math.sin(t)*.9;
-const g=x.createRadialGradient(-80,-100,40,0,0,R);g.addColorStop(0,'#14506a');g.addColorStop(1,'#071f2d');x.fillStyle=g;x.beginPath();x.arc(0,0,R,0,7);x.fill();
-x.strokeStyle='rgba(25,182,166,.35)';x.lineWidth=3;x.stroke();
-for(const p of pts){const lat=Math.asin(p[1]),lon=Math.atan2(p[0],p[2]),q=P(lat,lon,rot,tilt);if(q[2]>0){x.fillStyle=`rgba(120,230,215,${.15+.6*q[2]})`;x.fillRect(q[0]*R,-q[1]*R,3,3)}}
-const q=P(TH[0],TH[1],rot,tilt);if(q[2]>0){const px=q[0]*R,py=-q[1]*R,k=(Math.sin(t*6)+1)/2;x.strokeStyle='#e8ae2f';x.lineWidth=3;x.beginPath();x.arc(px,py,10+k*26,0,7);x.globalAlpha=1-k;x.stroke();x.globalAlpha=1;x.fillStyle='#e8ae2f';x.beginPath();x.arc(px,py,8,0,7);x.fill();x.fillStyle='#fff';x.font='600 26px IBM Plex Sans';x.fillText('Thailand',px+24,py+8)}
-x.save();x.rotate(-.5);x.strokeStyle='rgba(232,174,47,.5)';x.setLineDash([6,10]);x.lineWidth=2;x.beginPath();x.ellipse(0,0,R*1.38,R*.55,0,0,7);x.stroke();x.restore();
-const a=t*1.4,sx=Math.cos(a)*R*1.38,sy=Math.sin(a)*R*.55,cr=Math.cos(-.5),sr=Math.sin(-.5);x.fillStyle='#e8ae2f';x.beginPath();x.arc(sx*cr-sy*sr,sx*sr+sy*cr,11,0,7);x.fill();
-x.setTransform(1,0,0,1,0,0);t+=.006;if(!rm)requestAnimationFrame(f)}
-f()})();
+function bodyTex(l0){const sp=Math.sin(TILT),cp=Math.cos(TILT),n=idx.length;
+for(let k=0;k<n;k++){const px=PX[k],py=PY[k],pz=PZ[k];let s=pz*sp+py*cp;s=s>1?1:s<-1?-1:s;const phi=Math.asin(s),lam=l0+Math.atan2(px,pz*cp-py*sp);let u=lam/(2*Math.PI)+.5;u-=Math.floor(u);let ty=((.5-phi/Math.PI)*TXH)|0;if(ty>=TXH)ty=TXH-1;const o=(ty*TXW+((u*TXW)|0))*4,f=.42+.58*pz;
+const r=T[o]*f*.84,g=T[o+1]*f*1.02,b=Math.min(255,T[o+2]*f*1.12);ob[idx[k]]=0xFF000000|((b|0)<<16)|((g|0)<<8)|(r|0)}
+ox.putImageData(oi,0,0);x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(oc,-R,-R,2*R,2*R)}
+function bodyDots(rot){const g=x.createRadialGradient(-80,-100,40,0,0,R);g.addColorStop(0,'#14506a');g.addColorStop(1,'#071f2d');x.fillStyle=g;x.beginPath();x.arc(0,0,R,0,7);x.fill();
+for(const p of pts){const lat=Math.asin(p[1]),lon=Math.atan2(p[0],p[2]),q=P(lat,lon,rot,TILT);if(q[2]>0){x.fillStyle=`rgba(120,230,215,${.15+.6*q[2]})`;x.fillRect(q[0]*R,-q[1]*R,3,3)}}}
+function grid(rot){x.lineWidth=1.5;x.strokeStyle='rgba(120,230,215,.2)';
+const run=(f)=>{x.beginPath();let on=false;for(let i=0;i<=120;i++){const q=f(i/120);if(q[2]>0){on?x.lineTo(q[0]*R,-q[1]*R):x.moveTo(q[0]*R,-q[1]*R);on=true}else on=false}x.stroke()};
+for(let lo=-180;lo<180;lo+=30)run(u=>P((u-.5)*Math.PI,lo*Math.PI/180,rot,TILT));
+for(let la=-60;la<=60;la+=30)run(u=>P(la*Math.PI/180,(u-.5)*2*Math.PI,rot,TILT))}
+function ring(a0,a1,al){x.save();x.rotate(RING);x.strokeStyle=`rgba(232,174,47,${al})`;x.setLineDash([6,10]);x.lineWidth=2;x.beginPath();x.ellipse(0,0,ORX,ORY,0,a0,a1);x.stroke();x.restore();x.setLineDash([])}
+function sat(a,sc,al){const sx=Math.cos(a)*ORX,sy=Math.sin(a)*ORY,cr=Math.cos(RING),sr=Math.sin(RING);
+x.save();x.translate(sx*cr-sy*sr,sx*sr+sy*cr);x.rotate(RING);x.scale(sc,sc);x.globalAlpha=al;
+x.fillStyle='rgba(232,174,47,.08)';x.beginPath();x.arc(0,0,30,0,7);x.fill();
+x.lineWidth=2.5;x.strokeStyle='#04141d';x.fillStyle='#ffd166';x.fillRect(-36,-4,22,8);x.strokeRect(-36,-4,22,8);x.fillRect(14,-4,22,8);x.strokeRect(14,-4,22,8);
+x.fillStyle=GOLD;x.fillRect(-10,-8,20,16);x.strokeRect(-10,-8,20,16);x.restore()}
+function draw(t){x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,W,W);x.translate(W/2,W/2);
+const rot=rm?-1.76:-1.76+Math.sin(t)*.9,a=rm?1:t*1.4,front=Math.sin(a)>0;
+ring(Math.PI,2*Math.PI,.3);if(!front)sat(a,.78,.6);
+if(T)bodyTex(-rot);else bodyDots(rot);
+const sh=x.createRadialGradient(-110,-120,40,0,0,R*1.25);sh.addColorStop(0,'rgba(3,14,22,0)');sh.addColorStop(.55,'rgba(3,14,22,.12)');sh.addColorStop(1,'rgba(3,14,22,.62)');x.fillStyle=sh;x.beginPath();x.arc(0,0,R,0,7);x.fill();
+if(T)grid(rot);
+const at=x.createRadialGradient(0,0,R*.8,0,0,R*1.08);at.addColorStop(0,'rgba(25,182,166,0)');at.addColorStop(.72,'rgba(25,182,166,.12)');at.addColorStop(.93,'rgba(120,230,215,.3)');at.addColorStop(1,'rgba(25,182,166,0)');x.fillStyle=at;x.beginPath();x.arc(0,0,R*1.08,0,7);x.fill();
+x.strokeStyle='rgba(25,182,166,.55)';x.lineWidth=3;x.beginPath();x.arc(0,0,R,0,7);x.stroke();
+const q=P(TH[0],TH[1],rot,TILT);if(q[2]>0){const px=q[0]*R,py=-q[1]*R,k=rm?.5:(Math.sin(t*6)+1)/2;x.strokeStyle=GOLD;x.lineWidth=3;x.beginPath();x.arc(px,py,10+k*26,0,7);x.globalAlpha=1-k;x.stroke();x.globalAlpha=1;x.fillStyle=GOLD;x.beginPath();x.arc(px,py,8,0,7);x.fill();x.font='600 30px IBM Plex Sans,system-ui,sans-serif';x.lineJoin='round';x.lineWidth=6;x.strokeStyle='rgba(4,20,29,.8)';x.strokeText('Thailand',px+24,py+10);x.fillStyle='#fff';x.fillText('Thailand',px+24,py+10)}
+ring(0,Math.PI,.55);if(front)sat(a,1.15,1)}
+function loop(ts){requestAnimationFrame(loop);if(!vis||ts-last<33)return;last=ts;draw(ts/1000*.36)}
+function start(){draw(0);if(!rm)requestAnimationFrame(loop)}
+new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(c);
+const im=new Image();im.onload=()=>{try{const t=document.createElement('canvas');t.width=TXW;t.height=TXH;const tx=t.getContext('2d');tx.drawImage(im,0,0,TXW,TXH);T=tx.getImageData(0,0,TXW,TXH).data}catch(e){T=null}start()};im.onerror=start;im.src='kaoterramind-img/earth.jpg';
+})();
 </script>
 </body>
 </html>
