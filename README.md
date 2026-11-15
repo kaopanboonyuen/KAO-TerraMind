@@ -199,7 +199,7 @@ If you use KAO-TerraMind, please cite this work **and** the original TerraMind p
 
 ```bibtex
 @article{panboonyuen2026kaoterramind,
-  title   = {KaoTerraMind: Targeted Adaptation of Geospatial Foundation Models for Dense Prediction},
+  title   = {KAO-TerraMind: Targeted Adaptation of Geospatial Foundation Models for Dense Prediction},
   author  = {Panboonyuen, Teerapong},
   year    = {2026},
   note    = {Manuscript in preparation for submission to CVPR 2027},
